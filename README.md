@@ -1,5 +1,5 @@
 # COM3D2.ExtendedErrorHandling
-A compilation of error fixes and handling that prevent the game from crashing or being stupid when encountering harmless errors.
+A compilation of error fixes and handling that prevent the game from crashing or being stupid when encountering harmless errors. Some error fixes already existed, others were made for the first time.
 
 # Implemented So Far
 - ErrorTexturePlaceholder, literally a copy paste.
