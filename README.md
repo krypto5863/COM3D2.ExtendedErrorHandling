@@ -10,3 +10,13 @@ A compilation of error fixes and handling that prevent the game from crashing or
 - Auto-sets `QuitWhenAssert` in code. The `config.xml` property is ignored.
 
 More as I encounter them.
+
+# Usage
+1. Download the Plugin.
+2. Put it in `BepinEx/Plugins`
+3. Done
+
+Make sure your game and CMI or whatever are up to date at the time of the release you download.
+
+# Enjoy!
+And don't abuse your meidos!
