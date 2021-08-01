@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 
 namespace ExtendedErrorHandling
 {
-    [BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.0")]
+    [BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.1")]
     public class Main : BaseUnityPlugin
     {
 
