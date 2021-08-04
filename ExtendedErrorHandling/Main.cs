@@ -15,24 +15,23 @@ using UnityEngine.SceneManagement;
 
 namespace ExtendedErrorHandling
 {
-    [BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.1")]
-    public class Main : BaseUnityPlugin
-    {
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.2")]
+	public class Main : BaseUnityPlugin
+	{
 
-        internal static Main main;
-        internal static ManualLogSource BepLogger;
-        private void Awake() 
-        {
-            Harmony.CreateAndPatchAll(typeof(MenuItemRedundancy));
-            Harmony.CreateAndPatchAll(typeof(PresetErrorHandling));
-            Harmony.CreateAndPatchAll(typeof(Serialization));
-            Harmony.CreateAndPatchAll(typeof(ErrorTexturePlaceholder));
+		internal static Main main;
+		internal static ManualLogSource BepLogger;
+		private void Awake()
+		{
+			BepLogger = Logger;
+			main = this;
 
-            BepLogger = Logger;
+			Harmony.CreateAndPatchAll(typeof(MenuItemRedundancy));
+			Harmony.CreateAndPatchAll(typeof(PresetErrorHandling));
+			Harmony.CreateAndPatchAll(typeof(Serialization));
+			Harmony.CreateAndPatchAll(typeof(ErrorTexturePlaceholder));
 
-            main = this;
-
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += MenuItemRedundancy.DoOnTitleScreen;
-        }
-    }
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded += MenuItemRedundancy.DoOnTitleScreen;
+		}
+	}
 }

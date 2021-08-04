@@ -62,4 +62,9 @@
     <Compile Include="Serialization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>del "G:\KISS\COM3D2Test\BepinEx\plugins\$(TargetFileName)"
+copy "$(TargetPath)" "G:\KISS\COM3D2Test\BepinEx\plugins"
+powershell start-process "G:\KISS\COM3D2Test\COM3D2x64.exe"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
