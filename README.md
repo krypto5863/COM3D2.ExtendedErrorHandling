@@ -16,7 +16,7 @@ More as I encounter them.
 2. Put it in `BepinEx/Plugins`
 3. Done
 
-Make sure your game and CMI or whatever are up to date at the time of the release you download.
+Make sure your game and CMI or whatever are up to date at the time of the release you download. Please keep in mind EEH replaces CCFix, ErrorTexturePlaceholder, and ExceptionHusherUpper, meaning that these should be removed or you will likely encounter issues.
 
 # Enjoy!
 And don't abuse your meidos!
