@@ -1,15 +1,17 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
-using System.Text;
 using UnityEngine;
 
 namespace ExtendedErrorHandling
 {
-	static class ErrorTexturePlaceholder
+	internal static class ErrorTexturePlaceholder
 	{
+		internal static Dictionary<string, string> RawImages;
+
 		private const string MISSING_TEX =
 	"iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0BAMAAAA5+MK5AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv" +
 	"8YQUAAAAwUExURQAAAP8A3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI" +
@@ -34,9 +36,42 @@ namespace ExtendedErrorHandling
 		{
 			if (__exception == null)
 				return;
-			Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
+
+			if (Main.LoadRawPNG.Value)
+			{
+				if (RawImages == null)
+				{
+					RawImages = new Dictionary<string, string>();
+
+					var Files = Directory.GetFiles(BepInEx.Paths.GameRootPath + "\\Mod", "*.*", SearchOption.AllDirectories).Where(t => t.ToLower().EndsWith(".png")).ToArray();
+
+					for (int i = 0; i < Files.Count(); i++)
+					{
+						RawImages[Path.GetFileNameWithoutExtension(Files[i])] = Files[i];
+					}
+				}
+
+				if (RawImages.TryGetValue(Path.GetFileNameWithoutExtension(f_strFileName), out var path))
+				{
+					try
+					{
+						__result = new TextureResource(1, 1, TextureFormat.ARGB32, new Rect[0], File.ReadAllBytes(path));
+						Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] While `{f_strFileName}` doesn't exist, we found a PNG file that may be the texture unconverted. We've loaded it instead. Please convert the texture as soon as possible if it's the proper one.");
+					}
+					catch
+					{
+					}
+				}
+			}
+
+			if (__result == null)
+			{
+				Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
+
+				__result = tex;
+			}
+
 			__exception = null;
-			__result = tex;
 		}
 
 		[HarmonyPatch(typeof(ImportCM), "LoadTexture")]
@@ -51,7 +86,7 @@ namespace ExtendedErrorHandling
 					Transpilers.EmitDelegate<Action<string, bool>>((msg, valid) =>
 					{
 						if (!valid)
-							throw new Exception("File is not valid (it's likely missing or filesystem failed to load it)");
+							throw new Exception("File is not valid (it's likely missing or file-system failed to load it)");
 					})
 				)
 				.MatchForward(false,
@@ -62,7 +97,7 @@ namespace ExtendedErrorHandling
 					new CodeInstruction(OpCodes.Ldloc_1),
 					Transpilers.EmitDelegate<Action<Exception>>(ex =>
 					{
-						throw new Exception($"Failed to load texture (it's either missing or a mod is misconfigured!). Inner exception: ({ex.GetType()}) {ex.Message}");
+						throw new Exception($"Failed to load texture (it's either missing or a mod is mis-configured!). Inner exception: ({ex.GetType()}) {ex.Message}");
 					})
 				)
 				.MatchForward(true,
