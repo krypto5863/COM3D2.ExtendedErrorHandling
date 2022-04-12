@@ -8,6 +8,7 @@ A compilation of error fixes and handling that prevent the game from crashing or
 - Having a CategoryCreator or corrupt preset will no longer cause the preset panel to fail to open in Edit Mode. An error code in the console will display the name of any bad presets.
 - Loading a menu file with a missing model file will no longer cause a crash or a looping error message. Normally setting `QuitWhenAssert` in your `config.xml` had the exact same effect but Kiss recently broke it and the message reappears infinitely effectively breaking the game. You should be cleaning your mod folder though.
 - Auto-sets `QuitWhenAssert` in code. The `config.xml` property is ignored.
+- Auto-creates missing game folders (those that can be empty) in order to avoid crashes when the game finds the folder missing. Critical game folders aren't recreated because if they're missing, you have a much bigger issue.
 
 More as I encounter them.
 
