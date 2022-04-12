@@ -13,7 +13,7 @@ using System.Security.Permissions;
 
 namespace ExtendedErrorHandling
 {
-	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.3")]
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.4")]
 	public class Main : BaseUnityPlugin
 	{
 		internal static Main main;
