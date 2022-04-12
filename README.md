@@ -2,7 +2,7 @@
 A compilation of error fixes and handling that prevent the game from crashing or being stupid when encountering harmless errors. Some error fixes already existed, others were made for the first time.
 
 # Implemented So Far
-- ErrorTexturePlaceholder~~, literally a copy paste.~~
+- ErrorTexturePlaceholder, ~~literally a copy paste.~~
 - CCFix, ported to harmony.
 - Loading a maid with a missing face or body will no longer cause a flood of errors that cause a crash by falling back to the default ones.
 - Having a CategoryCreator or corrupt preset will no longer cause the preset panel to fail to open in Edit Mode. An error code in the console will display the name of any bad presets.
