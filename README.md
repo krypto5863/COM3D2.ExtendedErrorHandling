@@ -15,8 +15,9 @@ More as I encounter them.
 
 # Usage
 1. Download the Plugin.
-2. Put it in `BepinEx/Plugins`
-3. Done
+2. (Optional) Download [COM3D2.CornerMessage](https://github.com/krypto5863/COM3D2.CornerMessage/releases)
+3. Put them in `BepinEx/Plugins`
+4. Done
 
 Make sure your game and CMI or whatever are up to date at the time of the release you download. Please keep in mind EEH replaces CCFix, ErrorTexturePlaceholder, and ExceptionHusherUpper, meaning that these should be removed or you will likely encounter issues.
 
