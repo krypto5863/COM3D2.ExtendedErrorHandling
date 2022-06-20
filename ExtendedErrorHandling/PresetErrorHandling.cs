@@ -14,6 +14,7 @@ namespace ExtendedErrorHandling
 			if (__exception != null)
 			{
 				Main.BepLogger.LogError($"{__1} could not be loaded!!");
+				CornerMessage.DisplayMessage($"[ff4e33]Preset Not Loaded: {__1}[-]");
 			}
 
 			return null;

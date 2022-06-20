@@ -28,11 +28,16 @@ namespace ExtendedErrorHandling
 				{
 					Main.BepLogger.LogWarning($"Body menu: {__0.strFileName} could not be found! Reverting to base body...");
 
+	
+					CornerMessage.DisplayMessage($"[fffd7a]Missing Body: {__0.strFileName}[-]");
+
 					__0.strFileName = "body001_I_.menu";
 				}
 				else if ((MPN)__0.idx == MPN.head)
 				{
 					Main.BepLogger.LogWarning($"Face menu: {__0.strFileName} could not be found! Reverting to base face...");
+
+					CornerMessage.DisplayMessage($"[fffd7a]Missing Face: {__0.strFileName}[-]");
 
 					__0.strFileName = "face006_I_.menu";
 				}
@@ -46,6 +51,7 @@ namespace ExtendedErrorHandling
 			if (__exception != null)
 			{
 				Main.BepLogger.LogError($"There was an exception while trying to read {mp.strFileName}");
+				CornerMessage.DisplayMessage($"[ff4e33]Couldn't read {mp.strFileName}[-]");
 			}
 
 			return null;

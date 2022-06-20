@@ -67,6 +67,7 @@ namespace ExtendedErrorHandling
 			if (__result == null)
 			{
 				Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
+				CornerMessage.DisplayMessage($"[fffd7a]Checkered Texture: Couldn't load {f_strFileName}[-]");
 
 				__result = tex;
 			}

@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,8 @@ using System.Security.Permissions;
 
 namespace ExtendedErrorHandling
 {
-	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.4")]
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.5")]
+	[BepInDependency("COM3D2.CornerMessage", BepInDependency.DependencyFlags.SoftDependency)]
 	public class Main : BaseUnityPlugin
 	{
 		internal static Main main;
@@ -28,6 +30,8 @@ namespace ExtendedErrorHandling
 			LoadRawPNG = Config.Bind("General", "Load Raw Images (Experimental)", false, "When a .tex file can't be found, it will instead attempt to find a png file of the same name and load it in place. Not suggested, can increase memory usage.");
 
 			CreateMissingFolders();
+
+			CornerMessage.CornerMessageLoaded = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("COM3D2.CornerMessage");
 
 			Harmony.CreateAndPatchAll(typeof(MenuItemRedundancy));
 			Harmony.CreateAndPatchAll(typeof(PresetErrorHandling));
@@ -55,6 +59,23 @@ namespace ExtendedErrorHandling
 					}
 				}
 			}
+		}
+	}
+	//Classes for optional CornerMessage support. The segmentation of classes should prevent the TypeLoadException error when the dll isn't loaded.
+	internal static class CornerMessage
+	{
+		internal static bool CornerMessageLoaded = false;
+
+		internal static void DisplayMessage(string mess, float dur = 6f) 
+		{
+			if (CornerMessageLoaded)
+			{
+				TryCornerMessage.DisplayMessage(mess, dur);
+			}
+		}
+		internal static class TryCornerMessage
+		{
+			internal static void DisplayMessage(string mess, float dur) => COM3D2.CornerMessage.Main.DisplayMessage(mess, dur);
 		}
 	}
 }
