@@ -12,7 +12,7 @@ namespace ExtendedErrorHandling
 	{
 		internal static Dictionary<string, string> RawImages;
 
-		private const string MISSING_TEX =
+		private const string MissingTex =
 	"iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0BAMAAAA5+MK5AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv" +
 	"8YQUAAAAwUExURQAAAP8A3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI" +
 	"/r1v0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJ3SURBVHja7c8xEQAgAMQwLODfLIeNbzp1zbm/86sdO" +
@@ -28,7 +28,7 @@ namespace ExtendedErrorHandling
 	"R0efuKY6CUZHR0dHR1+m1/3o6Ojo6OjoE9dUJ8Ho6Ojo6OjL9LofHR0dHR0dfeKa6iQYHR0dHR19mV7" +
 	"3o6Ojb9+9DzgHN1XYvWlQAAAAAElFTkSuQmCC";
 
-		private static TextureResource tex = new TextureResource(1, 1, TextureFormat.ARGB32, new Rect[0], Convert.FromBase64String(MISSING_TEX));
+		private static readonly TextureResource MissingTextureResource = new TextureResource(1, 1, TextureFormat.ARGB32, new Rect[0], Convert.FromBase64String(MissingTex));
 
 		[HarmonyPatch(typeof(ImportCM), "LoadTexture")]
 		[HarmonyFinalizer]
@@ -37,17 +37,17 @@ namespace ExtendedErrorHandling
 			if (__exception == null)
 				return;
 
-			if (Main.LoadRawPNG.Value)
+			if (ExtendedErrorHandling.LoadRawPng.Value)
 			{
 				if (RawImages == null)
 				{
 					RawImages = new Dictionary<string, string>();
 
-					var Files = Directory.GetFiles(BepInEx.Paths.GameRootPath + "\\Mod", "*.*", SearchOption.AllDirectories).Where(t => t.ToLower().EndsWith(".png")).ToArray();
+					var files = Directory.GetFiles(BepInEx.Paths.GameRootPath + "\\Mod", "*.*", SearchOption.AllDirectories).Where(t => t.ToLower().EndsWith(".png")).ToArray();
 
-					for (int i = 0; i < Files.Count(); i++)
+					foreach (var pngFile in files)
 					{
-						RawImages[Path.GetFileNameWithoutExtension(Files[i])] = Files[i];
+						RawImages[Path.GetFileNameWithoutExtension(pngFile)] = pngFile;
 					}
 				}
 
@@ -56,20 +56,21 @@ namespace ExtendedErrorHandling
 					try
 					{
 						__result = new TextureResource(1, 1, TextureFormat.ARGB32, new Rect[0], File.ReadAllBytes(path));
-						Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] While `{f_strFileName}` doesn't exist, we found a PNG file that may be the texture unconverted. We've loaded it instead. Please convert the texture as soon as possible if it's the proper one.");
+						ExtendedErrorHandling.PluginLogger.LogWarning($"[ImportCM.LoadTexture] While `{f_strFileName}` doesn't exist, we found a PNG file that may be the texture unconverted. We've loaded it instead. Please convert the texture as soon as possible if it's the proper one.");
 					}
 					catch
 					{
+						// ignored
 					}
 				}
 			}
 
 			if (__result == null)
 			{
-				Main.BepLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
+				ExtendedErrorHandling.PluginLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
 				CornerMessage.DisplayMessage($"[fffd7a]Checkered Texture: Couldn't load {f_strFileName}[-]");
 
-				__result = tex;
+				__result = MissingTextureResource;
 			}
 
 			__exception = null;
@@ -77,9 +78,9 @@ namespace ExtendedErrorHandling
 
 		[HarmonyPatch(typeof(ImportCM), "LoadTexture")]
 		[HarmonyTranspiler]
-		public static IEnumerable<CodeInstruction> CleanUpLoadFailMessages(IEnumerable<CodeInstruction> instrs)
+		public static IEnumerable<CodeInstruction> CleanUpLoadFailMessages(IEnumerable<CodeInstruction> instructions)
 		{
-			return new CodeMatcher(instrs)
+			return new CodeMatcher(instructions)
 				.MatchForward(false,
 					new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(NDebug), "Assert", new[] { typeof(string), typeof(bool) })))
 				.SetAndAdvance(OpCodes.Nop, null)
@@ -96,10 +97,7 @@ namespace ExtendedErrorHandling
 				.Insert(
 					new CodeInstruction(OpCodes.Pop),
 					new CodeInstruction(OpCodes.Ldloc_1),
-					Transpilers.EmitDelegate<Action<Exception>>(ex =>
-					{
-						throw new Exception($"Failed to load texture (it's either missing or a mod is mis-configured!). Inner exception: ({ex.GetType()}) {ex.Message}");
-					})
+					Transpilers.EmitDelegate<Action<Exception>>(ex => throw new Exception($"Failed to load texture (it's either missing or a mod is mis-configured!). Inner exception: ({ex.GetType()}) {ex.Message}"))
 				)
 				.MatchForward(true,
 					new CodeMatch(OpCodes.Ldstr, "CM3D2_TEX"),
@@ -108,10 +106,7 @@ namespace ExtendedErrorHandling
 				.Advance(1)
 				.Insert(
 					new CodeInstruction(OpCodes.Ldloc_3),
-					Transpilers.EmitDelegate<Action<string>>((txt) =>
-					{
-						throw new Exception($"Invalid header. Got: `{txt}`, should be `CM3D2_TEX`.");
-					})
+					Transpilers.EmitDelegate<Action<string>>((txt) => throw new Exception($"Invalid header. Got: `{txt}`, should be `CM3D2_TEX`."))
 				)
 				.InstructionEnumeration();
 		}

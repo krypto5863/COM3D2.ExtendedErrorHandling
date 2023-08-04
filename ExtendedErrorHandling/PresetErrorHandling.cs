@@ -7,34 +7,41 @@ namespace ExtendedErrorHandling
 {
 	internal static class PresetErrorHandling
 	{
-		[HarmonyPatch(typeof(CharacterMgr), "PresetLoad", new Type[] { typeof(BinaryReader), typeof(string) })]
+		[HarmonyPatch(typeof(CharacterMgr), "PresetLoad", typeof(BinaryReader), typeof(string))]
 		[HarmonyFinalizer]
-		internal static Exception Finalizer(Exception __exception, string __1)
+		internal static Exception PresetLoadErrorFix(Exception __exception, string __1)
 		{
-			if (__exception != null)
+			if (__exception == null)
 			{
-				Main.BepLogger.LogError($"{__1} could not be loaded!!");
-				CornerMessage.DisplayMessage($"[ff4e33]Preset Not Loaded: {__1}[-]");
+				return null;
 			}
+
+			ExtendedErrorHandling.PluginLogger.LogError($"{__1} could not be loaded!!");
+			CornerMessage.DisplayMessage($"[ff4e33]Preset Not Loaded: {__1}[-]");
 
 			return null;
 		}
 
+		//previous code is commented, it seemed to be pointless when a quick linq does the same.
 		[HarmonyPatch(typeof(CharacterMgr), "PresetListLoad")]
 		[HarmonyPostfix]
-		internal static void ListCleaner(ref List<CharacterMgr.Preset> __result)
+		internal static void PresetListCleaner(ref List<CharacterMgr.Preset> __result)
 		{
-			CharacterMgr.Preset[] listCopy = new CharacterMgr.Preset[__result.Count];
+			__result.RemoveAll(r => r == null);
+
+			/*
+			var listCopy = new CharacterMgr.Preset[__result.Count];
 
 			__result.CopyTo(listCopy);
 
-			foreach (CharacterMgr.Preset preset in listCopy)
+			foreach (var preset in listCopy)
 			{
 				if (preset == null)
 				{
 					__result.Remove(preset);
 				}
 			}
+			*/
 		}
 	}
 }
