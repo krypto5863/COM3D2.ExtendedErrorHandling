@@ -2,17 +2,17 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using JetBrains.Annotations;
 using System.IO;
 using System.Security;
 using System.Security.Permissions;
-using JetBrains.Annotations;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace ExtendedErrorHandling
 {
-	[BepInPlugin("Instance", "Instance", "1.6")]
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.6.1")]
 	[BepInDependency("COM3D2.CornerMessage", BepInDependency.DependencyFlags.SoftDependency)]
 	public class ExtendedErrorHandling : BaseUnityPlugin
 	{
