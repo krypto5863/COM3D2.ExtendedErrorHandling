@@ -81,6 +81,7 @@
     <Compile Include="ErrorTexturePlaceholder.cs" />
     <Compile Include="ExtendedErrorHandling.cs" />
     <Compile Include="MenuItemRedundancy.cs" />
+    <Compile Include="NDebugMod.cs" />
     <Compile Include="PresetErrorHandling.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization.cs" />

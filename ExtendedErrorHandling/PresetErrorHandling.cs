@@ -7,7 +7,7 @@ namespace ExtendedErrorHandling
 {
 	internal static class PresetErrorHandling
 	{
-		[HarmonyPatch(typeof(CharacterMgr), "PresetLoad", typeof(BinaryReader), typeof(string))]
+		[HarmonyPatch(typeof(CharacterMgr), nameof(CharacterMgr.PresetLoad), typeof(BinaryReader), typeof(string))]
 		[HarmonyFinalizer]
 		internal static Exception PresetLoadErrorFix(Exception __exception, string __1)
 		{
@@ -17,13 +17,16 @@ namespace ExtendedErrorHandling
 			}
 
 			ExtendedErrorHandling.PluginLogger.LogError($"{__1} could not be loaded!!");
-			CornerMessage.DisplayMessage($"[ff4e33]Preset Not Loaded: {__1}[-]");
+			CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
+				? $"[ff4e33]Preset load failed: {__1}[-]"
+				: "[ff4e33]A preset failed to load...[-]");
+
 
 			return null;
 		}
 
 		//previous code is commented, it seemed to be pointless when a quick linq does the same.
-		[HarmonyPatch(typeof(CharacterMgr), "PresetListLoad")]
+		[HarmonyPatch(typeof(CharacterMgr), nameof(CharacterMgr.PresetListLoad))]
 		[HarmonyPostfix]
 		internal static void PresetListCleaner(ref List<CharacterMgr.Preset> __result)
 		{

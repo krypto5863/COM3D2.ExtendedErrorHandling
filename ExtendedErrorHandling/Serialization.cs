@@ -7,7 +7,7 @@ namespace ExtendedErrorHandling
 {
 	internal static class Serialization
 	{
-		[HarmonyPatch(typeof(Maid), "GetProp", typeof(string))]
+		[HarmonyPatch(typeof(Maid), nameof(Maid.GetProp), typeof(string))]
 		[HarmonyPrefix]
 		public static void GetPropStringFix(Maid __instance, ref string __0)
 		{
@@ -17,14 +17,14 @@ namespace ExtendedErrorHandling
 			}
 		}
 
-		[HarmonyPatch(typeof(CM3), "Init")]
+		[HarmonyPatch(typeof(CM3), nameof(CM3.Init))]
 		[HarmonyPrefix]
 		public static void CM_dic_fix()
 		{
 			CM3.dicDelItem[MPN.null_mpn] = string.Empty;
 		}
 
-		[HarmonyPatch(typeof(MaidProp), "Deserialize")]
+		[HarmonyPatch(typeof(MaidProp), nameof(MaidProp.Deserialize))]
 		[HarmonyTranspiler]
 		public static IEnumerable<CodeInstruction> MaidPropDesFix(IEnumerable<CodeInstruction> instructions)
 		{

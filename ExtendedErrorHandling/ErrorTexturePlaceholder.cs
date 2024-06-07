@@ -13,24 +13,24 @@ namespace ExtendedErrorHandling
 		internal static Dictionary<string, string> RawImages;
 
 		private const string MissingTex =
-	"iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0BAMAAAA5+MK5AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv" +
-	"8YQUAAAAwUExURQAAAP8A3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI" +
-	"/r1v0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJ3SURBVHja7c8xEQAgAMQwLODfLIeNbzp1zbm/86sdO" +
-	"jo6Ojo6+hC97kdHR0dHR0efuKY6CUZHR0dHR1+m1/3o6Ojo6OjoE9dUJ8Ho6Ojo6OjL9LofHR0dHR0d" +
-	"feKa6iQYHR0dHR19mV73o6Ojo6Ojo09cU50Eo6Ojo6OjL9PrfnR0dHR0dPSJa6qTYHR0dHR09GV63Y+" +
-	"Ojo6Ojo4+cU11EoyOjo6Ojr5Mr/vR0dHR0dHRJ66pToLR0dHR0dGX6XU/Ojo6Ojo6+sQ11UkwOjo6Oj" +
-	"r6Mr3uR0dHR0dHR5+4pjoJRkdHR0dHX6bX/ejo6Ojo6OgT11Qnwejo6Ojo6Mv0uh8dHR0dHR194prqJ" +
-	"BgdHR0dHX2ZXvejo6Ojo6OjT1xTnQSjo6Ojo6Mv0+t+dHR0dHR09IlrqpNgdHR0dHT0ZXrdj46Ojo6O" +
-	"jj5xTXUSjI6Ojo6Ovkyv+9HR0dHR0dEnrqlOgtHR0dHR0ZfpdT86Ojo6Ojr6xDXVSTA6Ojo6Ovoyve5" +
-	"HR0dHR0dHn7imOglGR0dHR0dfptf96Ojo6Ojo6BPXVCfB6Ojo6Ojoy/S6Hx0dHR0dHX3imuokGB0dHR" +
-	"0dfZle96Ojo6Ojo6NPXFOdBKOjo6Ojoy/T6350dHR0dHT0iWuqk2B0dHR0dPRlet2Pjo6Ojo6OPnFNd" +
-	"RKMjo6Ojo6+TK/70dHR0dHR0SeuqU6C0dHR0dHRl+l1Pzo6Ojo6OvrENdVJMDo6Ojo6+jK97kdHR0dH" +
-	"R0efuKY6CUZHR0dHR1+m1/3o6Ojo6OjoE9dUJ8Ho6Ojo6OjL9LofHR0dHR0dfeKa6iQYHR0dHR19mV7" +
-	"3o6Ojb9+9DzgHN1XYvWlQAAAAAElFTkSuQmCC";
+			"iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0BAMAAAA5+MK5AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv" +
+			"8YQUAAAAwUExURQAAAP8A3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI" +
+			"/r1v0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJ3SURBVHja7c8xEQAgAMQwLODfLIeNbzp1zbm/86sdO" +
+			"jo6Ojo6+hC97kdHR0dHR0efuKY6CUZHR0dHR1+m1/3o6Ojo6OjoE9dUJ8Ho6Ojo6OjL9LofHR0dHR0d" +
+			"feKa6iQYHR0dHR19mV73o6Ojo6Ojo09cU50Eo6Ojo6OjL9PrfnR0dHR0dPSJa6qTYHR0dHR09GV63Y+" +
+			"Ojo6Ojo4+cU11EoyOjo6Ojr5Mr/vR0dHR0dHRJ66pToLR0dHR0dGX6XU/Ojo6Ojo6+sQ11UkwOjo6Oj" +
+			"r6Mr3uR0dHR0dHR5+4pjoJRkdHR0dHX6bX/ejo6Ojo6OgT11Qnwejo6Ojo6Mv0uh8dHR0dHR194prqJ" +
+			"BgdHR0dHX2ZXvejo6Ojo6OjT1xTnQSjo6Ojo6Mv0+t+dHR0dHR09IlrqpNgdHR0dHT0ZXrdj46Ojo6O" +
+			"jj5xTXUSjI6Ojo6Ovkyv+9HR0dHR0dEnrqlOgtHR0dHR0ZfpdT86Ojo6Ojr6xDXVSTA6Ojo6Ovoyve5" +
+			"HR0dHR0dHn7imOglGR0dHR0dfptf96Ojo6Ojo6BPXVCfB6Ojo6Ojoy/S6Hx0dHR0dHX3imuokGB0dHR" +
+			"0dfZle96Ojo6Ojo6NPXFOdBKOjo6Ojoy/T6350dHR0dHT0iWuqk2B0dHR0dPRlet2Pjo6Ojo6OPnFNd" +
+			"RKMjo6Ojo6+TK/70dHR0dHR0SeuqU6C0dHR0dHRl+l1Pzo6Ojo6OvrENdVJMDo6Ojo6+jK97kdHR0dH" +
+			"R0efuKY6CUZHR0dHR1+m1/3o6Ojo6OjoE9dUJ8Ho6Ojo6OjL9LofHR0dHR0dfeKa6iQYHR0dHR19mV7" +
+			"3o6Ojb9+9DzgHN1XYvWlQAAAAAElFTkSuQmCC";
 
 		private static readonly TextureResource MissingTextureResource = new TextureResource(1, 1, TextureFormat.ARGB32, new Rect[0], Convert.FromBase64String(MissingTex));
 
-		[HarmonyPatch(typeof(ImportCM), "LoadTexture")]
+		[HarmonyPatch(typeof(ImportCM), nameof(ImportCM.LoadTexture))]
 		[HarmonyFinalizer]
 		public static void HandleTextureFail(ref Exception __exception, ref TextureResource __result, string f_strFileName)
 		{
@@ -68,7 +68,9 @@ namespace ExtendedErrorHandling
 			if (__result == null)
 			{
 				ExtendedErrorHandling.PluginLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
-				CornerMessage.DisplayMessage($"[fffd7a]Checkered Texture: Couldn't load {f_strFileName}[-]");
+				CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
+					? $"[f708e0]Texture load failed: {f_strFileName}![-]"
+					: "[f708e0]Failed to load texture! See console...[-]");
 
 				__result = MissingTextureResource;
 			}
@@ -76,7 +78,7 @@ namespace ExtendedErrorHandling
 			__exception = null;
 		}
 
-		[HarmonyPatch(typeof(ImportCM), "LoadTexture")]
+		[HarmonyPatch(typeof(ImportCM), nameof(ImportCM.LoadTexture))]
 		[HarmonyTranspiler]
 		public static IEnumerable<CodeInstruction> CleanUpLoadFailMessages(IEnumerable<CodeInstruction> instructions)
 		{

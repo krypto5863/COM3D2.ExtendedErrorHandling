@@ -12,12 +12,15 @@ using System.Security.Permissions;
 
 namespace ExtendedErrorHandling
 {
-	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.6.1")]
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.7")]
 	[BepInDependency("COM3D2.CornerMessage", BepInDependency.DependencyFlags.SoftDependency)]
 	public class ExtendedErrorHandling : BaseUnityPlugin
 	{
 		internal static ExtendedErrorHandling Instance;
 		internal static ManualLogSource PluginLogger => Instance.Logger;
+
+		internal static ConfigEntry<MessageBoxHandling> ConvertMessageBoxToCornerMessage;
+		internal static ConfigEntry<bool> VerboseCornerMessages;
 		internal static ConfigEntry<bool> LoadRawPng;
 
 		[UsedImplicitly]
@@ -25,59 +28,86 @@ namespace ExtendedErrorHandling
 		{
 			Instance = this;
 
-			LoadRawPng = Config.Bind("General", "Load Raw Images (Experimental)", false, "When a .tex file can't be found, it will instead attempt to find a png file of the same name and load it in place. Not suggested, can increase memory usage.");
+			ConvertMessageBoxToCornerMessage = Config.Bind("General", "Error Message Box Behavior",
+				MessageBoxHandling.Default,
+				"When the game encounters an error it considers fatal, it'll display a message box. Some users find this intrusive, this allows you to change the behavior.");
+			VerboseCornerMessages = Config.Bind("General", "Verbose Corner Messages", false,
+				"Corner messages will display more useful and complete information.");
 
-			CreateMissingFolders();
+			LoadRawPng = Config.Bind("Extra", "Load Raw Images (Experimental)", false,
+				"When a .tex file can't be found, it will instead attempt to find a png file of the same name and load it in place. Not suggested, can increase memory usage.");
 
-			CornerMessage.CornerMessageLoaded = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("COM3D2.CornerMessage");
+			CornerMessage.CornerMessageLoaded =
+				BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("COM3D2.CornerMessage");
 
+			Harmony.CreateAndPatchAll(typeof(ExtendedErrorHandling));
 			Harmony.CreateAndPatchAll(typeof(MenuItemRedundancy));
 			Harmony.CreateAndPatchAll(typeof(PresetErrorHandling));
 			Harmony.CreateAndPatchAll(typeof(Serialization));
 			Harmony.CreateAndPatchAll(typeof(ErrorTexturePlaceholder));
+			Harmony.CreateAndPatchAll(typeof(NDebugMod));
 
-			UnityEngine.SceneManagement.SceneManager.sceneLoaded += MenuItemRedundancy.DoOnTitleScreen;
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded += NDebugMod.DoOnTitleScreen;
+		}
+
+		[HarmonyPatch(typeof(GameMain), nameof(GameMain.OnInitialize))]
+		[HarmonyPostfix]
+		private static void AfterOnInit()
+		{
+			CreateMissingFolders();
 		}
 
 		public static void CreateMissingFolders()
 		{
-			var dirs = new[] { "Mod", "SaveData", "Preset", "MyRoom", "PhotoModeData", "ScreenShot", "Thumb" };
+			TryCreateDirectory(Path.Combine(Paths.GameRootPath, "Mod"));
+
+			var dirs = new[] { "SaveData", "Preset", "MyRoom", "PhotoModeData", "ScreenShot", "Thumb" };
 
 			foreach (var s in dirs)
 			{
-				if (Directory.Exists(Paths.GameRootPath + $"\\{s}"))
+				var dir = Path.Combine(GameMain.Instance.SerializeStorageManager.StoreDirectoryPath, s);
+				TryCreateDirectory(dir);
+			}
+
+			return;
+
+			void TryCreateDirectory(string s)
+			{
+				if (Directory.Exists(s))
 				{
-					continue;
+					return;
 				}
 
 				try
 				{
-					Directory.CreateDirectory(Paths.GameRootPath + $"\\{s}");
+					Directory.CreateDirectory(s);
 				}
 				catch
 				{
-					PluginLogger.LogFatal($"We couldn't create the directory {Paths.GameRootPath}\\{s}. Please create it manually or you will have errors.");
+					PluginLogger.LogFatal(
+						$"We couldn't create the directory {s}. Please create it manually or you will have errors.");
 				}
 			}
 		}
-	}
 
-	//Classes for optional CornerMessage support. The segmentation of classes should prevent the TypeLoadException error when the dll isn't loaded.
-	internal static class CornerMessage
-	{
-		internal static bool CornerMessageLoaded;
-
-		internal static void DisplayMessage(string mess, float dur = 6f)
+		//Classes for optional CornerMessage support. The segmentation of classes should prevent the TypeLoadException error when the dll isn't loaded.
+		internal static class CornerMessage
 		{
-			if (CornerMessageLoaded)
+			internal static bool CornerMessageLoaded;
+
+			internal static void DisplayMessage(string mess, float dur = 6f)
 			{
-				TryCornerMessage.DisplayMessage(mess, dur);
+				if (CornerMessageLoaded)
+				{
+					TryCornerMessage.DisplayMessage(mess, dur);
+				}
 			}
-		}
 
-		internal static class TryCornerMessage
-		{
-			internal static void DisplayMessage(string mess, float dur) => COM3D2.CornerMessage.CornerMessage.DisplayMessage(mess, dur);
+			internal static class TryCornerMessage
+			{
+				internal static void DisplayMessage(string mess, float dur) =>
+					COM3D2.CornerMessage.CornerMessage.DisplayMessage(mess, dur);
+			}
 		}
 	}
 }
