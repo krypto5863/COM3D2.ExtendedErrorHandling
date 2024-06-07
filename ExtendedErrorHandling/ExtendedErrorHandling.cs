@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using System.IO;
 using System.Security;
 using System.Security.Permissions;
+using UnityEngine.SceneManagement;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -47,13 +48,14 @@ namespace ExtendedErrorHandling
 			Harmony.CreateAndPatchAll(typeof(ErrorTexturePlaceholder));
 			Harmony.CreateAndPatchAll(typeof(NDebugMod));
 
-			UnityEngine.SceneManagement.SceneManager.sceneLoaded += NDebugMod.DoOnTitleScreen;
+			SceneManager.sceneLoaded += NDebugMod.DoOnTitleScreen;
+			SceneManager.sceneLoaded += SomeSceneLoaded;
 		}
 
-		[HarmonyPatch(typeof(GameMain), nameof(GameMain.OnInitialize))]
-		[HarmonyPostfix]
-		private static void AfterOnInit()
+		private static void SomeSceneLoaded(Scene arg0, LoadSceneMode arg1)
 		{
+			PluginLogger.LogDebug("First scene loaded! Creating folders...");
+			SceneManager.sceneLoaded -= SomeSceneLoaded;
 			CreateMissingFolders();
 		}
 

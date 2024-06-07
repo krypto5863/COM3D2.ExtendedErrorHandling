@@ -68,7 +68,7 @@ namespace ExtendedErrorHandling
 			if (__result == null)
 			{
 				ExtendedErrorHandling.PluginLogger.LogWarning($"[ImportCM.LoadTexture] Failed to load texture `{f_strFileName}`: ({__exception.GetType()}) {__exception.Message}");
-				CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
+				ExtendedErrorHandling.CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
 					? $"[f708e0]Texture load failed: {f_strFileName}![-]"
 					: "[f708e0]Failed to load texture! See console...[-]");
 

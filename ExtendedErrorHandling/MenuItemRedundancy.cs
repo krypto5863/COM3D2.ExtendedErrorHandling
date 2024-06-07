@@ -20,7 +20,7 @@ namespace ExtendedErrorHandling
 			{
 				ExtendedErrorHandling.PluginLogger.LogWarning($"Body menu: {__0.strFileName} could not be found! Reverting to base body...");
 
-				CornerMessage.DisplayMessage($"[fffd7a]Missing Body: {__0.strFileName}[-]");
+				ExtendedErrorHandling.CornerMessage.DisplayMessage($"[fffd7a]Missing Body: {__0.strFileName}[-]");
 
 				__0.strFileName = "body001_I_.menu";
 			}
@@ -28,7 +28,7 @@ namespace ExtendedErrorHandling
 			{
 				ExtendedErrorHandling.PluginLogger.LogWarning($"Face menu: {__0.strFileName} could not be found! Reverting to base face...");
 
-				CornerMessage.DisplayMessage($"[fffd7a]Missing Face: {__0.strFileName}[-]");
+				ExtendedErrorHandling.CornerMessage.DisplayMessage($"[fffd7a]Missing Face: {__0.strFileName}[-]");
 
 				__0.strFileName = "face006_I_.menu";
 			}
@@ -45,7 +45,7 @@ namespace ExtendedErrorHandling
 
 			ExtendedErrorHandling.PluginLogger.LogError($"There was an exception while trying to read {mp.strFileName}");
 
-			CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
+			ExtendedErrorHandling.CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
 				? $"[ff4e33]Menu read failed: {mp.strFileName}.[-]"
 				: "[ff4e33]Failed to read menu![-]");
 

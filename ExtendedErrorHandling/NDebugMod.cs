@@ -31,8 +31,8 @@ namespace ExtendedErrorHandling
 			{
 				case MessageBoxHandling.Disable:
 					return false;
-				case MessageBoxHandling.NotifyInCorner when CornerMessage.CornerMessageLoaded:
-					CornerMessage.DisplayMessage($"[ff4e33]{f_strTitle}: Check console...[-]");
+				case MessageBoxHandling.NotifyInCorner when ExtendedErrorHandling.CornerMessage.CornerMessageLoaded:
+					ExtendedErrorHandling.CornerMessage.DisplayMessage($"[ff4e33]{f_strTitle}: Check console...[-]");
 					return false;
 				case MessageBoxHandling.Default:
 				default:

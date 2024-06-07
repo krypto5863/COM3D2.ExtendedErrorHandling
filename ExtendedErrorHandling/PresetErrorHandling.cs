@@ -17,7 +17,7 @@ namespace ExtendedErrorHandling
 			}
 
 			ExtendedErrorHandling.PluginLogger.LogError($"{__1} could not be loaded!!");
-			CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
+			ExtendedErrorHandling.CornerMessage.DisplayMessage(ExtendedErrorHandling.VerboseCornerMessages.Value
 				? $"[ff4e33]Preset load failed: {__1}[-]"
 				: "[ff4e33]A preset failed to load...[-]");
 
