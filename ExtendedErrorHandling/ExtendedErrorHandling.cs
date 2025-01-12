@@ -14,7 +14,7 @@ using UnityEngine.SceneManagement;
 namespace ExtendedErrorHandling
 {
 	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.7")]
-	[BepInDependency("COM3D2.CornerMessage", BepInDependency.DependencyFlags.SoftDependency)]
+	[BepInDependency(COM3D2API.Com3D2Api.PluginGuid, COM3D2API.Com3D2Api.PluginVersion)]
 	public class ExtendedErrorHandling : BaseUnityPlugin
 	{
 		internal static ExtendedErrorHandling Instance;
@@ -37,9 +37,6 @@ namespace ExtendedErrorHandling
 
 			LoadRawPng = Config.Bind("Extra", "Load Raw Images (Experimental)", false,
 				"When a .tex file can't be found, it will instead attempt to find a png file of the same name and load it in place. Not suggested, can increase memory usage.");
-
-			CornerMessage.CornerMessageLoaded =
-				BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("COM3D2.CornerMessage");
 
 			Harmony.CreateAndPatchAll(typeof(ExtendedErrorHandling));
 			Harmony.CreateAndPatchAll(typeof(MenuItemRedundancy));
@@ -95,21 +92,8 @@ namespace ExtendedErrorHandling
 		//Classes for optional CornerMessage support. The segmentation of classes should prevent the TypeLoadException error when the dll isn't loaded.
 		internal static class CornerMessage
 		{
-			internal static bool CornerMessageLoaded;
-
-			internal static void DisplayMessage(string mess, float dur = 6f)
-			{
-				if (CornerMessageLoaded)
-				{
-					TryCornerMessage.DisplayMessage(mess, dur);
-				}
-			}
-
-			internal static class TryCornerMessage
-			{
-				internal static void DisplayMessage(string mess, float dur) =>
-					COM3D2.CornerMessage.CornerMessage.DisplayMessage(mess, dur);
-			}
+			internal static void DisplayMessage(string mess, float dur = 6f) => 
+			COM3D2API.UI.MessageApi.QueueCornerText(mess, dur);
 		}
 	}
 }

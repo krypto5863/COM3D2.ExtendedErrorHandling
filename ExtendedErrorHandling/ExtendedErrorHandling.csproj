@@ -45,6 +45,9 @@
     <Reference Include="BepInEx, Version=5.4.21.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\BepInEx.BaseLib.5.4.21\lib\net35\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="COM3D2.API">
+      <HintPath>..\..\COM3D2.API\COM3D2.API\bin\Release\COM3D2.API.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.10.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net35\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -85,12 +88,6 @@
     <Compile Include="PresetErrorHandling.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\COM3D2.CornerMessage\COM3D2.CornerMessage\COM3D2.CornerMessage.csproj">
-      <Project>{f218b6f5-a7b8-49de-a13b-28faef0d5097}</Project>
-      <Name>COM3D2.CornerMessage</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
