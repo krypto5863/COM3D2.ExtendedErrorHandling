@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 
 namespace ExtendedErrorHandling
 {
-	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.7")]
+	[BepInPlugin("ExtendedErrorHandling", "ExtendedErrorHandling", "1.7.1")]
 	[BepInDependency(COM3D2API.Com3D2Api.PluginGuid, COM3D2API.Com3D2Api.PluginVersion)]
 	public class ExtendedErrorHandling : BaseUnityPlugin
 	{
